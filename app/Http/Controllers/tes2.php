@@ -7524,7 +7524,7 @@ class tes2 extends Controller
             
             }elseif($n == 7){
                     $h = ($array[0]*$p1)+($array[1]*$p2)+($array[2]*$p3)+($array[3]*$p4)+($array[4]*$p5)+($array[5]*$p6)+$array[6];
-                    var_dump($h);
+                    // var_dump($h);
                 
             }elseif($n == 8){
                             $h = ($array[0]*$p1)+($array[1]*$p2)+($array[2]*$p3)+($array[3]*$p4)+($array[4]*$p5)+($array[5]*$p6)+($array[6]*$p7)+$array[7];
@@ -7593,7 +7593,7 @@ class tes2 extends Controller
             $data->nama_file= $imageName;
             $data->id_users = $id;
             $data->date = $date;
-$data->gram = 3;        //set gram db
+$data->gram = 8;        //set gram db
 $data->window = 7;      //set window db
         $data->save();
 
@@ -7621,18 +7621,18 @@ $data->window = 7;      //set window db
         
         $c1 = [];$c2 = [];$c3 = [];$c4 = [];$c5 = [];
         $all = [];
-
+        $rata_sim = [];
         $dokumen = DB::table('hash') 
         ->join('file', 'hash.id_file', '=', 'file.id_file')
         ->where('file.id_file','!=',$id)
-    ->where('file.gram',3)
+    ->where('file.gram',8)
     ->where('file.window',7)
         ->get(['hash.id_hash','hash.judul','hash.kata_kunci','hash.abstrak','hash.pendahuluan','hash.hasil','file.nama_file','file.file_judul','file.id_file']);
        
         $dokumen_relevansi = DB::table('hash') 
         ->join('file', 'hash.id_file', '=', 'file.id_file')
         ->where('file.id_file','=',$id)
-    ->where('file.gram',3)
+    ->where('file.gram',8)
     ->where('file.window',7)
         ->get(['hash.id_hash','hash.judul','hash.kata_kunci','hash.abstrak','hash.pendahuluan','hash.hasil','file.nama_file','file.file_judul','file.id_file']);
     // analis doc
@@ -7697,6 +7697,7 @@ $data->window = 7;      //set window db
                     $irs_a=array_diff($dok_a,$dok_b);   //beda a
                     $irs_b=array_diff($dok_b,$dok_a);   //beda b
                     $da = array_merge($gb,$irs_a,$irs_b);
+                    
                     $sim_p = count($gb)/count($da)*100;
                     // echo ' <br>['.$dokumen[$i]->nama_file.']'.'['.$dokumen_relevansi[0]->nama_file.'] hasil similarity pendahuluan ';
                     // echo '<b>['.$i.']</b>';
@@ -7743,7 +7744,7 @@ $data->window = 7;      //set window db
                     // echo '<hr> hasil rata_rata <hr>';
                     // echo ($sim_j+$sim_a+$sim_p+$sim_h+$sim_k)/5;
                     // echo '<hr>';   
-                        
+                    $rata_sim [] = [($sim_j+$sim_a+$sim_p+$sim_h+$sim_k)/5];
                     $arr_doc [] = substr($d_b,0,200).'..... === ' .substr($d_a,0,200).'.....';
                     $arr_name_doc_a [] =  $dokumen[$i]->nama_file;
                     $arr_name_doc_b [] = $dokumen_relevansi[0]->nama_file;
@@ -7983,6 +7984,7 @@ $data->window = 7;      //set window db
                     }
                     // echo '<hr>';
                 }
+                
                 $resul_v = [];
                 for ($ca=0; $ca < $count_data; $ca++) { 
                    $v = $arr_c1[$ca]+$arr_c2[$ca]+$arr_c3[$ca]+$arr_c4[$ca]+$arr_c5[$ca];
@@ -7992,9 +7994,51 @@ $data->window = 7;      //set window db
                 //    echo '<br>';
                 }
 
+                //tanpa SAW
+              
+            //     $jmb_dat = count($rata_sim);
+            //   $jm=0;
+            //     for ($i=0; $i < $jmb_dat; $i++) { 
+            //         $jm += $rata_sim[$i][0];
+            //     }
+               
+            //     $rata =  $jm/$jmb_dat;
+            //     $xrata = 0;
+            //     // echo $rata;
+            //     for ($i=0; $i <$jmb_dat ; $i++) { 
+            //         $xrata +=pow($rata_sim[$i][0]-$rata,2);
+            //     }
+            //     $resss = [];
+            //     $hhh = $xrata/($jmb_dat-1)*0.75+$rata;
+            //     // echo($hhh);
+            //     // $hhh = $xrata/($jmb_dat);
+            //     // $as = sqrt($hhh);
+            //     // echo($xrata/39*0.75);
+            //     for ($i=0; $i <$jmb_dat ; $i++) { 
+            //         if($hhh < $rata_sim[$i][0]){
+            //             $resss []=[$rata_sim[$i][0]];
+            //         }
+            //     }
+
+                $jmb_dat = count($resul_v);
+                $sum = array_sum($resul_v);
+                $rata =  $sum/$jmb_dat;
+                $xrata = 0;
+                for ($i=0; $i <$jmb_dat ; $i++) { 
+                    $xrata +=pow($resul_v[$i]-$rata,2);
+                    
+                }
+                $resss = [];
+                $hhh = ($xrata/($jmb_dat-1))*0.75+$rata;
+                for ($i=0; $i <$jmb_dat ; $i++) { 
+                    if($hhh < $resul_v[$i]){
+                        $resss []=[$resul_v[$i]];
+                    }
+                }
+                // echo 'jumlah data = '.count($resss).'<br> bobot standar = '.$hhh;
                 // var_dump($resul_v);
 
-        return view('result_document',['dokumen'=> $arr_doc,'hasil_dokumen'=> $resul_v,'doc_a'=> $arr_name_doc_a,'doc_b'=> $arr_name_doc_b]);              
+        return view('result_document',['dokumen'=> $arr_doc,'rata'=> $rata_sim,'hasil_dokumen'=> $resul_v,'doc_a'=> $arr_name_doc_a,'doc_b'=> $arr_name_doc_b]);              
 
     }
 
@@ -8019,7 +8063,7 @@ $data->window = 7;      //set window db
 
     $b = 2;                                        //basis (bilangan prima)
         // $all = [];
-        $n = 3;
+        $n = 8; //gram
         // $request->gram;    //gram
             $send = preg_replace('/[^A-Za-z0-9\-]/', ' ', $request->cari);
 			$string = preg_replace("/[^A-Za-z]/", " ", $send);
@@ -8135,10 +8179,11 @@ $n = 7;                                         //window setting
                    $arr_name_doc = [];
                    $id_dokumen = [];
                    $all = [];
+                   $rata_sim = [];
 
                    $dokumen = DB::table('hash') 
                    ->join('file', 'hash.id_file', '=', 'file.id_file')
-->where('file.gram',3)                                           //where gram
+->where('file.gram',8)                                           //where gram
 ->where('file.window',7)
 
                    ->get(['hash.id_hash','hash.judul','hash.kata_kunci','hash.abstrak','hash.pendahuluan','hash.hasil','file.nama_file','file.file_judul','file.id_file']);
@@ -8175,6 +8220,7 @@ $n = 7;                                         //window setting
                         // echo '<br>document<br>';
                         // var_dump($dok_a_j);
                         // echo '<br><br>';
+                        // echo '<hr>['.$dokumen[$i]->nama_file.'judul'.']<hr>';
                         // echo $sim_j;
 
                         
@@ -8188,8 +8234,8 @@ $n = 7;                                         //window setting
                          $da = array_merge($gb,$irs_a,$irs_b);
                         $sim_a = count($gb)/count($da)*100;
                         // echo ' <br>['.$dokumen[$i]->nama_file.']'.'[ query : '.$request->cari.'] hasil similarity abstrak <br>';
+                        // echo '<hr>['.$dokumen[$i]->nama_file.'abstrak'.']<hr>';
                         // echo $sim_a;
-                        
                         
                         $dok_a_p = unserialize($dokumen[$i]->pendahuluan);
                         $cari_dok = $arr_cari;
@@ -8208,6 +8254,7 @@ $n = 7;                                         //window setting
                         $sim_p = count($gb)/count($da)*100;
                         
                         // echo ' <br>['.$dokumen[$i]->nama_file.']'.'[ query : '.$request->cari.'] hasil similarity pendahuluan <br>';
+                        // echo '<hr>['.$dokumen[$i]->nama_file.'pendahuluan'.']<hr>';
                         // echo $sim_p;
                         
 
@@ -8227,11 +8274,12 @@ $n = 7;                                         //window setting
                          $da = array_merge($gb,$irs_a,$irs_b);
                         $sim_h = count($gb)/count($da)*100;
                         // echo ' <br>['.$dokumen[$i]->nama_file.']'.'[ query : '.$request->cari.'] hasil similarity hasil <br>';
+                        // echo '<hr>['.$dokumen[$i]->nama_file.'hasil'.']<hr>';
                         // echo $sim_h;
                         // echo '<br>'; 
                         
-                        $dok_a_h = unserialize($dokumen[$i]->kata_kunci);
-                        $cari_dok = $arr_cari;
+                        // $dok_a_h = unserialize($dokumen[$i]->kata_kunci);
+                        // $cari_dok = $arr_cari;
                         // echo ' <hr> kata kunci cari';
                         // var_dump($arr_cari);
                         // echo ' <hr> dokumen ';
@@ -8250,7 +8298,7 @@ $n = 7;                                         //window setting
                          $da = array_merge($gb,$irs_a,$irs_b);
                         $sim_k = count($gb)/count($da)*100;
                         // echo ' <br>['.$dokumen[$i]->nama_file.']'.'[ query : '.$request->cari.'] hasil similarity kata kunci <br>';
-                    //    echo '<hr>['.$dokumen[$i]->nama_file.']<hr>';
+                    //    echo '<hr>['.$dokumen[$i]->nama_file.'kata kunci'.']<hr>';
                         // echo $sim_k;
                         // echo '<hr> array yang sama';
                         // echo '<hr>';
@@ -8258,9 +8306,9 @@ $n = 7;                                         //window setting
                         // echo '<hr>';
 
                         // echo '<hr> hasil rata_rata <hr>';
-                        // echo ($sim_j+$sim_a+$sim_p+$sim_h+$sim_k)/5;
+                        $rata_sim [] = [($sim_j+$sim_a+$sim_p+$sim_h+$sim_k)/5];
                         // echo '<hr>'; 
-                     
+                       
                     $arr_doc [] = '['.$d_a.']';
                     $arr_name_doc [] = $dokumen[$i]->nama_file;
                     $id_dokumen [] = $dokumen[$i]->id_file;
@@ -8320,8 +8368,8 @@ $n = 7;                                         //window setting
 
                  //======================  SAW  =======================
         $result = []; $result2 = []; $result3 = []; $result4 = []; $result5 = [];
-        // $weigth = [0.20, 0.30, 0.15, 0.10, 0.25];
         $weigth = [0.10, 0.275, 0.175, 0.20, 0.25];
+        // $weigth = [0.05, 0.35, 0.3, 0.20, 0.1];
         $R = [];
             // $R1 = [];
             // $R2 = [];
@@ -8530,16 +8578,66 @@ $n = 7;                                         //window setting
                     //    echo '<br>';
                 }
                 // var_dump($resul_v);
+                //tanpa SAW
+              
+                $jmb_dat = count($rata_sim);
+              $jm=0;
+                for ($i=0; $i < $jmb_dat; $i++) { 
+                    $jm += $rata_sim[$i][0];
+                }
+               
+                $rata =  $jm/$jmb_dat;
+                $xrata = 0;
+                // echo $rata;
+                for ($i=0; $i <$jmb_dat ; $i++) { 
+                    $xrata +=pow($rata_sim[$i][0]-$rata,2);
+                    // $xrata +=($rata_sim[$i][0]);
+                    
+                }
+                $resss = [];
+                $hhh = $xrata/($jmb_dat-1)*0.75+$rata;
+                // $hhh = $xrata/($jmb_dat);
+                for ($i=0; $i <$jmb_dat ; $i++) { 
+                    if($hhh < $rata_sim[$i][0]){
+                        $resss []=[$rata_sim[$i][0]];
+                    }
+                }
+                echo 'jumlah data = '.count($resss).'<br> bobot standar = '.$hhh;
+                
+
+                //+saw
+                $jmb_dat = count($resul_v);
+                // dd($jmb_dat);
+                $sum = array_sum($resul_v);
+             
+                $rata =  $sum/$jmb_dat;
+                $xrata = 0;
+               
+                for ($i=0; $i <$jmb_dat ; $i++) { 
+                    $xrata +=pow($resul_v[$i]-$rata,2);
+                    // $xrata +=($resul_v[$i]);
+                    
+                }
+                // dd($xrata);
+                $resss = [];
+                $hhh = $xrata/($jmb_dat-1)*0.75+$rata;
+                // $hhh = $xrata/($jmb_dat);
+                for ($i=0; $i <$jmb_dat ; $i++) { 
+                    if($hhh < $resul_v[$i]){
+                        $resss []=[$resul_v[$i]];
+                    }
+                }
+                // echo 'jumlah data = '.count($resss).'<br> bobot standar = '.$hhh;
+                // var_dump($rata_sim);
                    $kons = array_sum($resul_v);
                     if ($kons != 0) {
-                        return view('result_cari',['dokumen_id'=> $id_dokumen,'dokumen'=> $arr_doc,'nama_dokumen'=> $arr_name_doc,'hasil_dokumen'=> $resul_v,'query'=>$request->cari]);  
+                        return view('result_cari',['dokumen_id'=> $id_dokumen,'dokumen'=> $arr_doc,'nama_dokumen'=> $arr_name_doc,'hasil_dokumen'=> $resul_v,'rata'=> $rata_sim,'query'=>$request->cari]);  
                     }
                 
                 return redirect('dashboard')->with('error', 'Hasil Query Tidak Ditemukan!');
       
 // tutup;
     }
-
     /**
      * Update the specified resource in storage.
      *

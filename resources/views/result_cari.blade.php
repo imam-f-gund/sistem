@@ -59,9 +59,12 @@
                                     </div>
                                     <div class="col-md-6">
                                           <td  class="text-justify">{{ substr($tes,0,200)}} .......</td>
+                                          {{-- <td  class="text-justify">{{ $tes}}</td> --}}
                                     </div>
                                     <div class="col-md-2">
-                                          <td class="text-center">{{$hasil_dokumen[$key]}}</td>
+                                          {{-- <td class="text-center">{{$hasil_dokumen[$key]}}</td> --}}
+                                          <td class="text-center">{{$rata[$key][0]}}</td>
+                                    </div> 
                                     </div> 
                                     <div class="col-md-3">
                                       <td>

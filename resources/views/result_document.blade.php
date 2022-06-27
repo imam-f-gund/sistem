@@ -47,6 +47,7 @@
                                    </div>
                                 <div class="col-md-2">
                                       <td  class="text-center">{{$hasil_dokumen[$key]}}</td>
+                                      {{-- <td class="text-center">{{$rata[$key][0]}}</td> --}}
                                 </div> 
                                 <div class="col-md-3">
                                   <td>

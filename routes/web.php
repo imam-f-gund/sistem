@@ -15,7 +15,7 @@ use App\Http\Controllers\tes2;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 Route::get('/lda',function (){
     return view('welcome');

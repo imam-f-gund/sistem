@@ -8,7 +8,7 @@ include 'ngram.php';
 
 
 
-$connect = mysqli_connect('localhost', 'root', '', 'winnowing');
+$connect = mysqli_connect('localhost', 'root', '', 'sss');
 
 $stemmerFactory = new \Sastrawi\Stemmer\StemmerFactory();
 $stemmer  = $stemmerFactory->createStemmer();
@@ -28,7 +28,6 @@ $stemmer  = $stemmerFactory->createStemmer();
 	
 //Scrapping
 	$source_pdf="jurnal/$name_file"; 
-
 	$output_folder="MyFolder/jurnal"; 
  
 	if (!file_exists($output_folder)) {  
@@ -51,7 +50,6 @@ $stemmer  = $stemmerFactory->createStemmer();
 		
 	if ($text == null) {
 			error($name_file);
-			
 	}
 	
 	$simbol = preg_replace('/[~]/', '', $text);
@@ -219,11 +217,11 @@ $stemmer  = $stemmerFactory->createStemmer();
 	//tutup stemming	
 		if ($connect->query($sql) === TRUE) {
 			
-			$word->setNgrams($j_text,3,'judul',2,$id);		//kata,Ngram,jenis,B(basic),id_doc
-			$word->setNgrams($a_text,3,'abstrak',2,$id);
-			$word->setNgrams($p_text,3,'pendahuluan',2,$id);
-			$word->setNgrams($h_text,3,'kesimpulan',2,$id);
-			$word->setNgrams($k_text,3,'key',2,$id);
+			$word->setNgrams($j_text,8,'judul',2,$id);		//kata,Ngram,jenis,B(basic),id_doc
+			$word->setNgrams($a_text,8,'abstrak',2,$id);
+			$word->setNgrams($p_text,8,'pendahuluan',2,$id);
+			$word->setNgrams($h_text,8,'kesimpulan',2,$id);
+			$word->setNgrams($k_text,8,'key',2,$id);
 		
 			$path = '../cobakpdf/MyFolder/jurnal';
 			removeFiles($path);
@@ -391,7 +389,7 @@ $stemmer  = $stemmerFactory->createStemmer();
 	function error($name){
 
 		
-		$connect = mysqli_connect('localhost', 'root', '', 'winnowing');
+		$connect = mysqli_connect('localhost', 'root', '', 'sss');
 		$img_path = "../cobakpdf/jurnal/";
 		// .$name_file;
 		// var_dump($img_path);

@@ -40,7 +40,7 @@ class ngram {
         // public $arr_hasil_hash = array();
         // Methods
         function setNgrams($word, $n, $value, $b, $ket) {
-            $conn = mysqli_connect('localhost', 'root', '', 'winnowing');
+            $conn = mysqli_connect('localhost', 'root', '', 'sss');
             $sql = "SELECT * FROM hash WHERE id_file=$ket";
             $result = $conn->query($sql);
            
@@ -93,7 +93,7 @@ class ngram {
             }
             
                 
-    $k = 3;                     //gram
+    $k = 8;                     //gram
 
             if($value == 'pendahuluan'){
                 // echo "<br>== pendahuluan ==<br>";
@@ -909,11 +909,11 @@ function pre_print2gram($var,$b,$ket){
                 }
             }
         }
-        echo "Gram";
-        echo "<table>";
+        // echo "Gram";
+        // echo "<table>";
     
-        var_dump($arr_ch_asc);
-        echo "</table>";
+        // var_dump($arr_ch_asc);
+        // echo "</table>";
         return $hash->sethash($arr_ch_asc,$b,2,$ket);
 }
 // gram 3
@@ -2278,11 +2278,11 @@ function pre_print5gram($var,$b,$ket){
   }
  }
 }
- echo "Gram";
- echo "<table>";
+//  echo "Gram";
+//  echo "<table>";
 
- var_dump($arr_ch_asc5);
- echo "</table>";
+//  var_dump($arr_ch_asc5);
+//  echo "</table>";
 return $hash->sethash($arr_ch_asc5,$b,5,$ket);
 }
 //gram 6
@@ -3132,10 +3132,10 @@ foreach($result5 as $res){    //6
  } //2
 } //1
 // var_dump($arr_ch_asc6);
-    echo "Gram";
-    echo "<table>";
-    var_dump($arr_ch_asc6);
-    echo "</table>";
+    // echo "Gram";
+    // echo "<table>";
+    // var_dump($arr_ch_asc6);
+    // echo "</table>";
 return $hash->sethash($arr_ch_asc6,$b,6,$ket);
 }
 
@@ -3835,10 +3835,10 @@ function pre_print00gram($var,$b,$ket){
     }
    }
   }
-    echo "Gram";
-    echo "<table>";
-    var_dump($arr_ch_asc4);
-    echo "</table>";
+    // echo "Gram";
+    // echo "<table>";
+    // var_dump($arr_ch_asc4);
+    // echo "</table>";
 return $hash->sethash($arr_ch_asc4,$b,7,$ket);
 }
 
@@ -7919,7 +7919,7 @@ class hash{
   function gethash($hash,$value, $id){  //save window result
     // echo "fingerprint<hr>";
     // var_dump($hash);
-        $conn = mysqli_connect('localhost', 'root', '', 'winnowing');
+        $conn = mysqli_connect('localhost', 'root', '', 'sss');
             $sql = "SELECT id_hash FROM hash WHERE id_file= $id";
             $result = $conn->query($sql);
 

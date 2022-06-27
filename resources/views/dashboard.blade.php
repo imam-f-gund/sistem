@@ -22,7 +22,7 @@
 
             <div class="form-group row">
                 <div class="col-10">
-                <input type="text" class="form-control" name="cari" placeholder="cari…."/> 
+                <textarea type="text" class="form-control" name="cari" placeholder="cari…."></textarea> 
                
             </div>
 
