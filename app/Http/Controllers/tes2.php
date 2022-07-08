@@ -27,7 +27,6 @@ class tes2 extends Controller
     public function index($array,$n,$b)
     {
         
-
         $ascii = array();
             $ascii [97] = 'a';    //97
             $ascii [98] = 'b';    //98
@@ -8602,7 +8601,7 @@ $n = 7;                                         //window setting
                         $resss []=[$rata_sim[$i][0]];
                     }
                 }
-                echo 'jumlah data = '.count($resss).'<br> bobot standar = '.$hhh;
+                // <!-- echo 'jumlah data = '.count($resss).'<br> bobot standar = '.$hhh; -->
                 
 
                 //+saw
