@@ -63,8 +63,9 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 "# TA" 
 
 ## EXAPLE SISTEM
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/imam-f-gund/sistem/2dfbdda98268ae0bc3309681850b9e5cc0ffd023/public/ss/query.png" width="400"></a></p>
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/imam-f-gund/sistem/2dfbdda98268ae0bc3309681850b9e5cc0ffd023/public/ss/upload.png" width="400"></a></p>
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/imam-f-gund/sistem/2dfbdda98268ae0bc3309681850b9e5cc0ffd023/public/ss/query.png" width="400"></a></p>
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/imam-f-gund/sistem/2dfbdda98268ae0bc3309681850b9e5cc0ffd023/public/ss/dok%20to%20dok.png" width="400"></a></p>
 
 
